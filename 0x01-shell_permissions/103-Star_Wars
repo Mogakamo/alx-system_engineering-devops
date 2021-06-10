@@ -1,0 +1,2 @@
+#!/bin/bash
+mplayer -vo caca '/home/amos/Downloads/Starwars episode IV A New Hope-Tobotron/Star.Wars.Episode.IV.A.New.Hope.1977.720p.HDTV.x264.INTERNAL-hV.mkv' 
