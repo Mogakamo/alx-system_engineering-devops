@@ -1,0 +1,6 @@
+#!/bin/bash
+function name(){
+	local BETTY="Holberton"
+	echo $BETTY
+}
+name
