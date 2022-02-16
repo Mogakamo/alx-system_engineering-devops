@@ -6,6 +6,7 @@ number of subcribers (not active, total subscribers)
 import json
 import requests
 
+
 def number_of_subscribers(subreddit):
     """return the number of subscribers"""
     url = requests.get("https://www.reddit.com/r/{}/about.json"
