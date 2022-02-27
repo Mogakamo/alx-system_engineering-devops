@@ -1,22 +1,38 @@
 #!/usr/bin/env bash
-# shellcheck disable=SC2016
-# installing and config load balancer
-sudo apt-get -y install software-properties-common
-sudo add-apt-repository -y ppa:vbernat/haproxy-2.0
-sudo apt-get -y update
-sudo apt-get -y install haproxy=2.0.\*
+# Installs HAProxy version 2.5 with the following configurations:
+#+    Enables management via the init script.
+#+    Distributes requests using a round-robin algorithm.
 
-echo "ENABLED=1" >> /etc/default/haproxy
+apt-get install -y software-properties-common
+add-apt-repository -y ppa:vbernat/haproxy-2.5
+apt-get update
+apt-get install -y haproxy=2.5.\*
 
-echo "
-frontend load_balancer
+echo "ENABLED=1" > /etc/default/haproxy
+
+printf %s "global
+    log 127.0.0.1 local0 notice
+    maxconn 2000
+    user haproxy
+    group haproxy
+defaults
+    log     global
+    mode    http
+    option  httplog
+    option  dontlognull
+    retries 3
+    option redispatch
+    timeout connect  5000
+    timeout client  10000
+    timeout server  10000
+listen load_balancer
     bind *:80
     mode http
-    default_backend webserver
-backend webserver
     balance roundrobin
-    server 145-web-01 34.75.104.239:80 check
-    server 145-web-02 34.73.71.102:80 check
-" >> /etc/haproxy/haproxy.cfg
-sudo service haproxy restart
+    option httpclose
+    option forwardfor
+    server 350-web-01 34.139.13.192:80 check
+    server 350-web-02 44.197.249.213:80 check
+" > /etc/haproxy/haproxy.cfg
 
+service haproxy start
